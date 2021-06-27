@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from lib.Rules import Rules
+from applib.Rules import Rules
 
 
 def main():
