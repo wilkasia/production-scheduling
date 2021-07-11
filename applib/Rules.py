@@ -28,12 +28,13 @@ class Rules:
     tmp = []
     rules = []
     types = {}
+    rules_dictionary = {}
 
     def __init__(self, in_file):
         self.in_file = in_file
 
     def get_rules(self, out_file_1, out_file_2):
-        print("Reding lines...")
+        print("Reading lines...")
         with open(self.in_file, newline='') as csvfile:
             c_reader = csv.reader(csvfile, delimiter=',')
             first_row = next(c_reader)
@@ -123,3 +124,31 @@ class Rules:
             print(x+" : "+str(self.types[x]))
 
         print("-------------------------------------")
+
+    def create_rules_dictionary(self):
+        for x in self.rules:
+            if x[0] in self.rules_dictionary:
+                self.rules_dictionary[x[0]].append(x[1])
+            else:
+                self.rules_dictionary[x[0]] = [x[1]]
+
+    def validate_daily_sequence(self, daily_sequence):
+        for index, type in enumerate(daily_sequence):
+            valid_next_types = self.rules_dictionary[type]
+
+            if index == 0:
+                if self.types[type]["day_first"] == 0:
+                    print("Daily sequence not valid")
+                    return False
+
+            if (index + 1) == len(daily_sequence):
+                if self.types[type]["day_last"] == 0:
+                    print("Daily sequence not valid")
+                    return False
+                break
+
+            if daily_sequence[index + 1] not in valid_next_types:
+                print("Daily sequence not valid")
+                return False
+
+        return True
