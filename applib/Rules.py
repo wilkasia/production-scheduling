@@ -18,7 +18,20 @@ import csv
 #             for row in c_reader:
 #                 if len(row) == self.columns:
 
-# Klasa tworzaca reguly dla poprawnosci przyszlego planu na podstawie danych archiwalnych z pliku
+# Klasa tworzaca reguly dla poprawnosci przyszlego planu na podstawie danych archiwalnych z pliku: prod-stal.csv
+#
+# Format i znaczenie wygenerowantch regul:
+# 1. Reguly okreslajace mozliwe nastepstwa typow stali: out_file_1. Kazdy wiersz reprezentuje 1 mozliwosc
+#    TYP,TYP
+# 2. Dodatkowe reguly dodtyczace danego gatunku stali out_file_2
+#    TYP,[0|1],[0|1],[0|1],[0|1]
+#
+#    TYP - TYP Stali,
+#    [0|1] - Mozliwosc wystapienia w jednym dniu jako pierszy,
+#    [0|1] - Mozliwosc wystapienia w jednym dniu jako ostatni,
+#    [0|1] - Istnieje regula nastepstwa gdzie wystepuje jako pierwszy,
+#    [0|1] - Istnieje regula nastepstwa gdzie wystepuje jako ostatni
+#
 class Rules:
     sec_list = []
     columns = 9
@@ -35,10 +48,16 @@ class Rules:
 
     def get_rules(self, out_file_1, out_file_2):
         print("Reading lines...")
+
+        # Create dictionary of types - keys = type names
+        # Create sequences as list two (sec_list) of two elements list [[name, name], [name, name], ...]
+        #    Sequences are in scope of single day
+        # self.types
         with open(self.in_file, newline='') as csvfile:
             c_reader = csv.reader(csvfile, delimiter=',')
             first_row = next(c_reader)
             tmp = []
+            type_id = 1
             for row in c_reader:
                 if len(row) == self.columns:
                     day = int(row[self.col_day])
@@ -55,11 +74,13 @@ class Rules:
                     self.last_day = day
 
                     if not row[self.col_brand] in self.types:
-                        self.types[row[self.col_brand]] = {"day_first": 0, "day_last": 0, "rule_first": 0,
-                                                           "rule_last": 0}
+                        self.types[row[self.col_brand]] = {"id": type_id, "day_first": 0, "day_last": 0,
+                                                           "rule_first": 0, "rule_last": 0}
+                        type_id += 1
 
+        # Create rules for the same types. This means that the same type may be continue in the next step
         for t in self.types.keys():
-            self.rules.append([t, t])
+            self.rules.append([t, t, 0])
 
         for x in self.sec_list:
 
@@ -81,8 +102,9 @@ class Rules:
                 for c in self.rules:
                     if c[0] == x[y] and c[1] == x[y + 1]:
                         add = 0
+                        c[2] += 1
                 if add == 1:
-                    self.rules.append([x[y], x[y + 1]])
+                    self.rules.append([x[y], x[y + 1], 1])
 
         for t in self.types.keys():
             for r in self.rules:
@@ -92,15 +114,19 @@ class Rules:
                     if r[1] == t:
                         self.types[t]["rule_last"] = 1
 
+        for r in self.rules:
+            r.append(self.types[r[0]]["id"])
+            r.append(self.types[r[1]]["id"])
+
         file_1 = open(out_file_1, 'w+', newline='')
         with file_1:
             write = csv.writer(file_1)
-            self.rules.sort()
+            # self.rules.sort()
             write.writerows(self.rules)
 
         t_types = []
         for t in self.types.keys():
-            t_types.append([t, self.types[t]["day_first"], self.types[t]["day_last"], self.types[t]["rule_first"],
+            t_types.append([t, self.types[t]["id"], self.types[t]["day_first"], self.types[t]["day_last"], self.types[t]["rule_first"],
                             self.types[t]["rule_last"]])
 
         file_2 = open(out_file_2, 'w+', newline='')
@@ -121,7 +147,7 @@ class Rules:
             print(x)
 
         for x in self.types.keys():
-            print(x+" : "+str(self.types[x]))
+            print(x + " : " + str(self.types[x]))
 
         print("-------------------------------------")
 
