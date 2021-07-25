@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Layout with Dijit</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css"
+          media="screen">
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
+            data-dojo-config="async:true, parseOnLoad:true"></script>
+</head>
+<body>
+<div class="ba-main-container">
+    <div class="ba-header">
+        <table style="width:100%;">
+            <tr>
+                <td style="width: 20%;">Test</td>
+            </tr>
+        </table>
+    </div>
+    <div class="ba-menu vertical-menu">
+        <a href="{{ url_for('index') }}">
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            <span>Home</span>
+        </a>
+        <a href="{{ url_for('plan') }}">
+            <i class="fa fa-font" aria-hidden="true"></i>
+            <span>Plan</span>
+        </a>
+    </div>
+    <div class="ba-main">
+        <section id="main-content" class="content">
+            <header>
+                {% block header %}{% endblock %}
+            </header>
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {% block content %}{% endblock %}
+        </section>
+    </div>
+</div>
+</body>
+</html>

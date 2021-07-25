@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1 style="margin-bottom: 15px">{% block title %}Plan{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table class="schedule-table">
+        <th class="schedule-th">Dzień</th>
+        <th class="schedule-th">Miesiąc</th>
+        <th class="schedule-th">Rok</th>
+        <th class="schedule-th">Tonaż</th>
+        <th class="schedule-th">Gatunek</th>
+        {% for scheduleRow in schedule %}
+            <tr class="schedule-tr">
+                <td class="schedule-td">{{scheduleRow.day}}</td>
+                <td class="schedule-td">{{scheduleRow.month}}</td>
+                <td class="schedule-td">{{scheduleRow.year}}</td>
+                <td class="schedule-td">{{scheduleRow.tonnage}}</td>
+                <td class="schedule-td">{{scheduleRow.steel_type}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

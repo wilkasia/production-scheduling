@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1 style="margin-bottom: 15px">{% block title %}Plan{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom: 15px">Work in progress</h1>
+    <h2 style="margin-bottom: 15px">Current schedule status: {{ current_status['status'] }}</h2>
+
+{% endblock %}

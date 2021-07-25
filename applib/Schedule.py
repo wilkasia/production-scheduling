@@ -1,5 +1,7 @@
 class Schedule:
-    schedule = []
+
+    def __init__(self):
+        self.schedule = []
 
     def add_row(self, schedule_row):
         self.schedule.append(schedule_row)

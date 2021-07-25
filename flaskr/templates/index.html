@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1 style="margin-bottom: 15px">{% block title %}Plan{% endblock %}</h1>
+    <a style="font-size: 1rem" class="action" href="{{ url_for('create_plan') }}">Create plan</a>
+{% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for('create_plan') }}" method="post">
+    <select name="type">
+        {% for key, value in types %}
+            <option value={{key}}>{{value}}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="type_tonnage">
+    <input type="submit">
+</form>
+
+{% endblock %}

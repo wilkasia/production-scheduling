@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 
-import os
+import os, datetime
 from applib.Rules import Rules
 from applib.ScheduleRow import ScheduleRow
 from applib.Schedule import Schedule

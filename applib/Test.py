@@ -14,7 +14,8 @@ class Test:
     #
     g_data = []
 
-    def test_1(self, file_1, file_2):
+    def test_1(self, file_1, types_numbers_mapping):
+
         items = 0
 
         #
@@ -189,12 +190,18 @@ class Test:
         min_l = min(map(len, paths_correct))
         print("min l: ", min_l)
 
+        paths_result_mapped = []
         for p in paths_correct:
             if len(p) == min_l:
+                path_result_mapped = []
+                for type in p:
+                    path_result_mapped.append(types_numbers_mapping.get(str(type)))
                 paths_result.append(p)
+                paths_result_mapped.append(path_result_mapped)
 
         print("---------------Paths result: ----------------")
         print(paths_result)
+        print(paths_result_mapped)
 
         #
         # WIZUALIZACJA WYNIKU
@@ -230,3 +237,4 @@ class Test:
             plt.clf()
             no += 1
 
+        return paths_result_mapped
