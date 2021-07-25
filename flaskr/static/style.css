@@ -103,3 +103,20 @@
 .schedule-td{
     padding: 0 20px 0 20px;
 }
+
+.app-shadow:hover {
+    filter: brightness(85%);
+    text-shadow: 0 0 3px;
+    cursor: pointer;
+    /*box-shadow: 0 0 3px;*/
+}
+
+.space-x1 {
+    margin: 0 1px 0 1px;
+}
+.space-x2 {
+    margin: 0 2px 0 2px;
+}
+.space-x3 {
+    margin: 0 3px 0 3px;
+}
