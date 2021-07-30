@@ -14,16 +14,22 @@ class Test:
     #
     g_data = []
 
-    def test_1(self, file_1, types_numbers_mapping):
+    def test_1(self, file_1, types_numbers_mapping, order, extra_items):
 
         items = 0
 
         #
         # Zadane typy stali do wyprodukowania
         #
-        types_to_process = [100, 102, 88, 33]
+        #types_to_process = [100, 102, 88, 33]
+        types_to_process = []
 
-        #
+        #Przykład tablicy order
+        #[{'id': '33', 'tonnage': '900', 'name': 'ATLASIII'}, {'id': '102', 'tonnage': '700', 'name': 'ATLASIII S2'},
+        # {'id': '100', 'tonnage': '500', 'name': 'C17CMC-B'}, {'id': '88', 'tonnage': '400', 'name': 'S355K2'}]
+        for item in order:
+            types_to_process.append(int(item['id']))
+
         # Typy stali do przetworzenia
         # INFO:
         # Poniewaz ze wzgledu na reguly nastepstw najczessciej zadane typy stali nie bedzie mozna

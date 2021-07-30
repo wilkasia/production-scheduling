@@ -2,20 +2,24 @@
 
 {% block header %}
     <h1 style="margin-bottom: 15px">{% block title %}Plan{% endblock %}</h1>
-    <a style="font-size: 1rem" class="action" href="{{ url_for('create_plan') }}">Create plan</a>
 {% endblock %}
 
 {% block content %}
 
 <form action="{{ url_for('create_plan') }}" method="post">
+
+    <h1><input type="submit" value="Wygeneruj plan" style="font-size: 1.2rem; margin-bottom: 20px"></h1>
+
+    <label class="label-extra" for="extra-items">Maksymalna ilość wyrobów nie zamówionych:</label>
+    <input class="input-extra" type="text" id="extra-items" name="extra-items">
+
     <select id="s-type" name="s-type">
         {% for key, value in types %}
             <option value={{key}}>{{value}}</option>
         {% endfor %}
     </select>
     <i id="add-item" class="fa fa-plus fa-lg app-shadow" style="color: green;"></i>
-    <input type="submit">
-    <div id="div-items"></div>
+    <div id="div-items" style="padding-top: 20px"></div>
 
 </form>
 <script type=text/javascript src="{{url_for('static', filename='plan.js') }}"></script>

@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1 style="margin-bottom: 15px">{% block title %}Plan{% endblock %}</h1>
+    <h1 style="margin-bottom: 15px">{% block title %}Podsumowanie produkcji{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
+
+    <table class="order-table">
+        <th class="order-th">Gatunek</th>
+        <th class="order-th">Tonaż</th>
+        {% for item in order %}
+        <tr class="order-tr">
+            <td class="order-td">{{item['name']}}</td>
+            <td class="order-td">{{item['tonnage']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Wygenerowano plan: </h2>
+
     <table class="schedule-table">
         <th class="schedule-th">Dzień</th>
         <th class="schedule-th">Miesiąc</th>

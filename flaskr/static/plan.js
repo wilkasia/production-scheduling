@@ -21,7 +21,7 @@ require([
             console.log(sType);
 
             const iDiv = domConstruct.create('div',{style:{margin:'2px 0 2px 0'}});
-            const iType = domConstruct.create('input',{type:'text',value:sType[sType.selectedIndex].innerHTML,readonly:'readonly'},iDiv);
+            const iType = domConstruct.create('input',{type:'text',value:sType[sType.selectedIndex].innerHTML,'data-id':sType[sType.selectedIndex].value, readonly:'readonly'},iDiv);
             domConstruct.create('span',{class:'space-x2'},iDiv);
             const iTonage = domConstruct.create('input',{type:'text',style:{width:'100px'}},iDiv);
             domConstruct.create('span',{class:'space-x2'},iDiv);
@@ -29,7 +29,7 @@ require([
             let iInput = domConstruct.create('input',{type:'hidden',name:'items[]', value:''},iDiv);
 
             on(iTonage,'change',function (){
-                iInput.value = JSON.stringify({id:sType.value,tonnage:this.value});
+                iInput.value = JSON.stringify({id:iType.dataset.id,tonnage:this.value});
             });
 
             on(iDelete,'click',function (){

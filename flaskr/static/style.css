@@ -35,22 +35,22 @@
 }
 
 .vertical-menu a {
-  background-color: #eee;
-  color: black;
-  display: block;
-  padding: 12px;
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
     margin: 5px;
-  text-decoration: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .vertical-menu a:hover {
-  background-color: #ccc;
+    background-color: #ccc;
 }
 
 .vertical-menu a.active {
-  background-color: dodgerblue;
-  color: white;
+    background-color: dodgerblue;
+    color: white;
 }
 
 .vertical-menu span {
@@ -63,10 +63,10 @@
     font-size: 1.2rem;
     background-color: #eee;
     border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-.book > h2{
+.book > h2 {
     margin: .2rem;
     font-size: 1.2rem;
 }
@@ -82,11 +82,11 @@
     font-size: 1.2rem;
     background-color: white;
     border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     border: solid lightgray 1px;
 }
 
-.post > h2{
+.post > h2 {
     margin: .3rem;
     font-size: 1.2rem;
 }
@@ -96,11 +96,27 @@
     font-size: 1rem;
 }
 
-.schedule-table, .schedule-th, .schedule-td{
+.schedule-table, .schedule-th, .schedule-td {
     border: 1px solid gray;
     border-collapse: collapse;
 }
-.schedule-td{
+
+.schedule-td {
+    padding: 0 20px 0 20px;
+}
+
+.order-table {
+    border: 1px solid gray;
+    border-collapse: collapse;
+    margin-bottom: 15px
+}
+
+.order-th, .order-td {
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+
+.order-td {
     padding: 0 20px 0 20px;
 }
 
@@ -114,9 +130,22 @@
 .space-x1 {
     margin: 0 1px 0 1px;
 }
+
 .space-x2 {
     margin: 0 2px 0 2px;
 }
+
 .space-x3 {
     margin: 0 3px 0 3px;
+}
+
+.label-extra {
+    display: block;
+    font: 1rem 'Fira Sans', sans-serif;
+    margin: .2rem 0;
+}
+
+.input-extra {
+    display: block;
+    margin: .2rem 0 20px;
 }
