@@ -15,7 +15,7 @@
 
     <select id="s-type" name="s-type">
         {% for key, value in types %}
-            <option value={{key}}>{{value}}</option>
+            <option value={{key}}>{{value[0]}}</option>
         {% endfor %}
     </select>
     <i id="add-item" class="fa fa-plus fa-lg app-shadow" style="color: green;"></i>

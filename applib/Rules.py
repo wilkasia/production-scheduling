@@ -48,6 +48,7 @@ class Rules:
 
     def get_rules(self, out_file_1, out_file_2):
         print("Reading lines...")
+        types_frequency = {}
 
         # Create dictionary of types - keys = type names
         # Create sequences as list two (sec_list) of two elements list [[name, name], [name, name], ...]
@@ -60,6 +61,12 @@ class Rules:
             type_id = 1
             for row in c_reader:
                 if len(row) == self.columns:
+
+                    if row[self.col_brand] in types_frequency.keys():
+                        types_frequency[row[self.col_brand]] += 1
+                    else:
+                        types_frequency[row[self.col_brand]] = 1
+
                     day = int(row[self.col_day])
                     if day != self.last_day:
                         tmp = []
@@ -127,8 +134,9 @@ class Rules:
         t_types = []
         for t in self.types.keys():
             t_types.append([t, self.types[t]["id"], self.types[t]["day_first"], self.types[t]["day_last"], self.types[t]["rule_first"],
-                            self.types[t]["rule_last"]])
+                            self.types[t]["rule_last"], types_frequency.get(t)])
 
+        print(types_frequency)
         file_2 = open(out_file_2, 'w+', newline='')
         with file_2:
             write = csv.writer(file_2)

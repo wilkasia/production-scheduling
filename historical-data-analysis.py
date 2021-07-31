@@ -73,3 +73,7 @@ print(len(is_last))
 materials_data = {'material': materials, 'is_first': is_first, 'is_last': is_last}
 
 materials_data_frame = pd.DataFrame(materials_data)
+
+# Ilość wystąpień poszczególnych gatunków
+occurences = df['Gatunek'].value_counts()
+print(occurences.get("B500SP"))

@@ -1,5 +1,6 @@
 import json
 import os, datetime, time, threading, csv
+from operator import itemgetter
 
 from flask import Flask, render_template, g, redirect, url_for, request
 
@@ -7,6 +8,18 @@ from applib.Rules import Rules
 from applib.Schedule import Schedule
 from applib.ScheduleRow import ScheduleRow
 from applib.Test import Test
+
+
+def create_types_data(file):
+    # Słownik z mapowaniem numer na gatunek i częstotliwość występowania
+    types_data = {}
+
+    with open(file, newline='') as csv_file:
+        c_reader = csv.reader(csv_file, delimiter=',')
+        for row in c_reader:
+            types_data[row[1]] = [row[0], row[6]]
+
+    return types_data
 
 
 def get_types(file):
@@ -22,6 +35,7 @@ def get_types(file):
 
 
 data = os.getcwd() + "/data/"
+types_data = create_types_data(data + "types-stal.csv")
 types_numbers = get_types(data + "types-stal.csv")
 
 schedule_status = {
@@ -44,6 +58,7 @@ def create_schedule():
     with app.app_context():
         global schedule_status
         global types_numbers
+        global types_data
 
         schedule_status['status'] = '0'
 
@@ -61,21 +76,44 @@ def create_schedule():
         t = Test()
         sequences = t.test_1(data + "rules-stal.csv", types_numbers, order, extra_items)
 
+        ordered_types = [item['id'] for item in order]
+
+        if len(sequences[0]) == len(order):
+            final_path = sequences[0]
+        else:
+            sequences_with_score = []
+            for sequence in sequences:
+                sequence_with_score = {"sequence": sequence}
+                score = 0
+                for steel_type in sequence:
+                    if str(steel_type) not in ordered_types:
+                        score += int(types_data.get(str(steel_type))[1])
+                sequence_with_score["score"] = score
+                sequences_with_score.append(sequence_with_score)
+
+            print(sequences_with_score)
+            final_path = max(sequences_with_score, key=itemgetter('score')).get('sequence')
+
         global schedule
         schedule = Schedule()
 
-        for i in range(len(sequences[0])):
-            row = ScheduleRow(datetime.date.today(), 145, sequences[0][i])
+        print(final_path)
+        for i in range(len(final_path)):
+            row = ScheduleRow(datetime.date.today(), 145, types_data.get(str(final_path[i]))[0])
             schedule.add_row(row)
+            if str(final_path[i]) not in ordered_types:
+                schedule.add_extra_type(final_path[i])
 
+        print("Extra types in schedule: ")
+        print(schedule.extra_types)
         print("Changing schedule_status")
         schedule_status['status'] = '1'
 
 
 @app.route('/', methods=['GET'])
 def index():
-    global types_numbers
-    return render_template('index.html', types=types_numbers.items())
+    global types_data
+    return render_template('index.html', types=types_data.items())
 
 
 @app.route('/create-plan', methods=['POST'])
@@ -86,7 +124,7 @@ def create_plan():
 
     for item in item_list:
         item_dict = json.loads(item)
-        type_name = types_numbers.get(item_dict['id'])
+        type_name = types_data.get(item_dict['id'])[0]
         item_dict["name"] = type_name
         order.append(item_dict)
 

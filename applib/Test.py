@@ -267,4 +267,4 @@ class Test:
             plt.clf()
             no += 1
 
-        return paths_result_mapped
+        return paths_result
