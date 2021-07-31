@@ -12,6 +12,8 @@ from applib.Test import Test
 # from matplotlib import cm
 # from matplotlib.ticker import LinearLocator
 # import numpy as np
+from flaskr.app import get_types
+
 
 def main():
     print('CWD')
@@ -32,7 +34,18 @@ def main():
     # t.first_model_train("prod-stal.csv")
 
     t = Test()
-    t.test_1(data + "rules-stal.csv", data + "types-stal.csv")
+
+    order = [
+        {'id': '100', 'tonnage': '900', 'name': 'S-100'},
+        {'id': '102', 'tonnage': '700', 'name': 'S-102'},
+        {'id': '88', 'tonnage': '500', 'name': 'S-88'},
+        {'id': '33', 'tonnage': '400', 'name': 'S-33'},
+        {'id': '12', 'tonnage': '400', 'name': 'S-12'},
+        {'id': '11', 'tonnage': '400', 'name': 'S-11'}
+    ]
+
+    types_numbers = get_types(data + "types-stal.csv")
+    t.test_1(data + "rules-stal.csv", types_numbers, order)
 
 
 
@@ -61,24 +74,24 @@ def main():
     # plt.show()
 
 
-    schedule = Schedule()
-
-    valid_sequence = ['S235JR', 'S235JR', 'B500B', '1006', 'XE400P', 'C4D1', 'C4D', 'B500B', '1018', '19MnB4']
-    for i in range(10):
-        row = ScheduleRow(datetime.date.today(), 141 + i, valid_sequence[i])
-        schedule.add_row(row)
-
-    invalid_sequence = ['1006', '16MnCr5', 'C4D1', 'C4D', 'B500SP', 'B500B', 'S235JR', 'C7D']
-    for i in range(8):
-        row = ScheduleRow(datetime.date.today() + datetime.timedelta(days=1), 142 + i, invalid_sequence[i])
-        schedule.add_row(row)
-
-
-    valid_daily_sequence = schedule.return_daily_sequence(datetime.date.today())
-    invalid_daily_sequence = schedule.return_daily_sequence(datetime.date.today() + datetime.timedelta(days=1))
-
-    print(r.validate_daily_sequence(valid_daily_sequence))
-    print(r.validate_daily_sequence(invalid_daily_sequence))
+    # schedule = Schedule()
+    #
+    # valid_sequence = ['S235JR', 'S235JR', 'B500B', '1006', 'XE400P', 'C4D1', 'C4D', 'B500B', '1018', '19MnB4']
+    # for i in range(10):
+    #     row = ScheduleRow(datetime.date.today(), 141 + i, valid_sequence[i])
+    #     schedule.add_row(row)
+    #
+    # invalid_sequence = ['1006', '16MnCr5', 'C4D1', 'C4D', 'B500SP', 'B500B', 'S235JR', 'C7D']
+    # for i in range(8):
+    #     row = ScheduleRow(datetime.date.today() + datetime.timedelta(days=1), 142 + i, invalid_sequence[i])
+    #     schedule.add_row(row)
+    #
+    #
+    # valid_daily_sequence = schedule.return_daily_sequence(datetime.date.today())
+    # invalid_daily_sequence = schedule.return_daily_sequence(datetime.date.today() + datetime.timedelta(days=1))
+    #
+    # print(r.validate_daily_sequence(valid_daily_sequence))
+    # print(r.validate_daily_sequence(invalid_daily_sequence))
 
 
 if __name__ == '__main__':

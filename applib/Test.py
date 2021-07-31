@@ -8,24 +8,23 @@ import trotter
 
 
 class Test:
-
     #
     # Lista na reguly nastepstw z wygenerowanego pliku csv
     #
     g_data = []
 
-    def test_1(self, file_1, types_numbers_mapping, order, extra_items):
+    def test_1(self, file_1, types_numbers_mapping, order, extra_items=[]):
 
         items = 0
 
         #
         # Zadane typy stali do wyprodukowania
         #
-        #types_to_process = [100, 102, 88, 33]
+        # types_to_process = [100, 102, 88, 33]
         types_to_process = []
 
-        #Przykład tablicy order
-        #[{'id': '33', 'tonnage': '900', 'name': 'ATLASIII'}, {'id': '102', 'tonnage': '700', 'name': 'ATLASIII S2'},
+        # Przykład tablicy order
+        # [{'id': '33', 'tonnage': '900', 'name': 'ATLASIII'}, {'id': '102', 'tonnage': '700', 'name': 'ATLASIII S2'},
         # {'id': '100', 'tonnage': '500', 'name': 'C17CMC-B'}, {'id': '88', 'tonnage': '400', 'name': 'S355K2'}]
         for item in order:
             types_to_process.append(int(item['id']))
@@ -98,7 +97,7 @@ class Test:
         # Poniewaz liste regul nastepstw naturalnie mozna pradstawic za pomoca grafu skierowanego
         # ponizszy kod tworzy i wizualizuje graf przy uzyciu biblioteki networkx
         #
-        plt.figure(figsize=(10, 10), dpi=80)
+        plt.figure(figsize=(20, 20), dpi=80)
 
         G = nx.DiGraph()
         G.add_edges_from(rules)
@@ -127,17 +126,19 @@ class Test:
 
         print("all types to process:")
         print(all_types_to_process)
+        print("types to process:")
+        print(types_to_process)
 
         #
         # Utworzenie listy wszystkich par typow stali do przetworzenia i zapisanie ich do listy "perm"
         #
-        p = trotter.Permutations(2, all_types_to_process)
+        p = trotter.Permutations(2, types_to_process)
         perm = p[0:]
 
         print("Perm: ")
         print(perm)
 
-        #
+        # ZZZ
         # Wyszukanie w utworzonym grafie najkrotszych sciezek poniedzy kombinacja wszystkich punktow
         # Wynik zapisujemy do paths_all_single i paths_all
         # W liscie paths_all bedziemu pozniej dodawac zlaczenie pojedynczycz sciezek wg regul nastepstw
@@ -151,6 +152,29 @@ class Test:
 
         print("paths 1")
         print(paths_all)
+        paths_all = sorted(paths_all, key=len)
+        paths_all_single = sorted(paths_all_single, key=len)
+        print("paths 1")
+        print(paths_all)
+
+        found = 0
+        tmp_paths = []
+        while found != 1:
+            for p1 in paths_all:
+                if set(types_to_process).issubset(p1):
+                    print("found:")
+                    print(p1)
+                    found = 1
+                    break
+                for p2 in paths_all_single:
+                    if p1[-1] == p2[0]:
+                        tmp_paths.append(p1[:-1] + p2)
+
+            for p3 in tmp_paths:
+                paths_all.append(p3)
+
+            tmp_paths = []
+
 
         #
         # Laczenie sciezek. Poniewaz w "paths_all" i "paths_all_single" sa te same sciezki laczymy ze soba
@@ -160,24 +184,24 @@ class Test:
         # ustalic tzw glebokosc laczenia np na podstawie  ilosci zadanych typow stali
         # Aktualnie mozna powiedziec ze glebokosc jest stala i wynosi 2
         #
-        for p1 in paths_all_single:
-            for p2 in paths_all_single:
-                if list(p1) != list(p2):
-                    for r in rules:
-                        if p1[-1] == r[0] and p2[0] == r[1]:
-                            pm = p1 + p2
-                            add = 1
-                            for p in paths_all:
-                                if list(p) == list(pm):
-                                    add = 0
-                                    break
-                            if add == 1:
-                                paths_all.append(pm)
-
-        print("paths 2")
-        print(paths_all)
-
+        # for p1 in paths_all_single:
+        #     for p2 in paths_all_single:
+        #         if list(p1) != list(p2):
+        #             for r in rules:
+        #                 if p1[-1] == r[0] and p2[0] == r[1]:
+        #                     pm = p1 + p2
+        #                     add = 1
+        #                     for p in paths_all:
+        #                         if list(p) == list(pm):
+        #                             add = 0
+        #                             break
+        #                     if add == 1:
+        #                         paths_all.append(pm)
         #
+        # print("paths 2")
+        # print(paths_all)
+        #
+        # #
         # Utworzenie listy prawidlowych sekwencji "paths_correct"
         #
         for path in paths_all:
