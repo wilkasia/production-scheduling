@@ -5,9 +5,10 @@ require([
     'dojo/on',
     'dojo/query',
     'dojo/json',
+    'dojo/request/xhr',
     'dojo/ready',
     'dojo/domReady!'
-],function (dom,domConstruct,domStyle,on,query,JSON,ready) {
+],function (dom,domConstruct,domStyle,on,query,JSON,xhr,ready) {
     'use strict';
 
     ready(function () {
@@ -40,6 +41,52 @@ require([
 
             domConstruct.place(iDiv,dItems);
         })
+
+        on(dom.byId('test-btn'),'click',function(){
+
+            xhrByObject('/test-ajax',{id:123,name:'jakas nazwa'},function (response){
+               console.log(response);
+            });
+
+        });
     });
+
+    const xhrByObject = function(url,obj,onOk) {
+        // if(wait) {
+        //     dcBase.appWait(true);
+        // }
+        xhr(url, {
+            method: 'POST',
+            handleAs: 'json',
+            data: JSON.stringify(obj),
+            headers: { 'Content-Type': 'application/json'}
+        }).then(
+            function(response){
+                //console.log(response);
+                if(response.message==='OK') {
+                    // if(wait) {
+                    //     dcBase.appWait(false);
+                    // }
+                    onOk(response.data);
+                }
+            },
+            function(err){
+                // if(wait) {
+                //     dcBase.appWait(false);
+                // }
+                try {
+                    // appMsg.error(JSON.parse(err.response.text).message);
+                    console.error(JSON.parse(err.response.text).message);
+                } catch (e) {
+                    window.location.reload();
+                }
+            });
+    }
+
+    const xhrById = function(url,id,onOk) {
+        xhrByObject(url,{id:id},onOk);
+    };
+
+
 
 });

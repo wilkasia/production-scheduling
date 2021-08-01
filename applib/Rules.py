@@ -186,3 +186,16 @@ class Rules:
                 return False
 
         return True
+
+
+def get_types_numbers_mapping(file):
+    # Słownik z mapowaniem numer na gatunek
+    types_numbers_mapping = {}
+
+    with open(file, newline='') as csv_file:
+        c_reader = csv.reader(csv_file, delimiter=',')
+        for row in c_reader:
+            types_numbers_mapping[row[1]] = row[0]
+
+    return types_numbers_mapping
+

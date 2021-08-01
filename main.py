@@ -12,7 +12,7 @@ from applib.Test import Test
 # from matplotlib import cm
 # from matplotlib.ticker import LinearLocator
 # import numpy as np
-from flaskr.app import get_types
+from flaskr.app import create_types_data
 
 
 def main():
@@ -51,8 +51,8 @@ def main():
         # {'id': '20', 'tonnage': '400', 'name': 'S-20'}
     ]
 
-    types_numbers = get_types(data + "types-stal.csv")
-    t.test_1(data + "rules-stal.csv", types_numbers, order)
+    types_data = create_types_data(data + "types-stal.csv")
+    t.test_1(data + "rules-stal.csv", types_data, order)
 
 
 

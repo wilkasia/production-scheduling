@@ -2,7 +2,7 @@ import json
 import os, datetime, time, threading, csv
 from operator import itemgetter
 
-from flask import Flask, render_template, g, redirect, url_for, request
+from flask import Flask, render_template, g, redirect, url_for, request, jsonify
 
 from applib.Rules import Rules
 from applib.Schedule import Schedule
@@ -22,28 +22,16 @@ def create_types_data(file):
     return types_data
 
 
-def get_types(file):
-    # Słownik z mapowaniem numer na gatunek
-    types_numbers_mapping = {}
-
-    with open(file, newline='') as csv_file:
-        c_reader = csv.reader(csv_file, delimiter=',')
-        for row in c_reader:
-            types_numbers_mapping[row[1]] = row[0]
-
-    return types_numbers_mapping
-
-
 data = os.getcwd() + "/data/"
 types_data = create_types_data(data + "types-stal.csv")
-types_numbers = get_types(data + "types-stal.csv")
 
 schedule_status = {
     "status": "0"
 }
 
-schedule = Schedule()
+rules_dictionary = {}
 order = []
+schedule = Schedule()
 extra_items = 0
 
 app = Flask(__name__)
@@ -57,8 +45,8 @@ def get_current_status():
 def create_schedule():
     with app.app_context():
         global schedule_status
-        global types_numbers
         global types_data
+        global rules_dictionary
 
         schedule_status['status'] = '0'
 
@@ -74,7 +62,7 @@ def create_schedule():
         global order
         global extra_items
         t = Test()
-        sequences = t.test_1(data + "rules-stal.csv", types_numbers, order, extra_items)
+        sequences = t.test_1(data + "rules-stal.csv", types_data, order, extra_items)
 
         ordered_types = [item['id'] for item in order]
 
@@ -96,16 +84,17 @@ def create_schedule():
 
         global schedule
         schedule = Schedule()
+        schedule.set_rules_dictionary(r.rules_dictionary)
 
-        print(final_path)
+        print("Final path: " + str(final_path))
+
         for i in range(len(final_path)):
             row = ScheduleRow(datetime.date.today(), 145, types_data.get(str(final_path[i]))[0])
             schedule.add_row(row)
             if str(final_path[i]) not in ordered_types:
                 schedule.add_extra_type(final_path[i])
 
-        print("Extra types in schedule: ")
-        print(schedule.extra_types)
+        print("Extra types in schedule: " + str(schedule.extra_types))
         print("Changing schedule_status")
         schedule_status['status'] = '1'
 
@@ -147,7 +136,25 @@ def plan():
             return render_template('progress.html', order=order)
         else:
             global schedule
-            return render_template('plan.html', order=order, schedule=schedule.schedule)
+            ordered_types = [item['name'] for item in order]
+            return render_template('plan.html', order=order, schedule=schedule.schedule, ordered_types=ordered_types)
+
+
+@app.route('/validate-schedule', methods=['POST', 'GET'])
+def validate_schedule():
+    global schedule
+    data = request.get_json()
+    new_rules = schedule.find_new_rules(data['sequence'])
+    results = {'message': 'OK', 'data': new_rules}
+    return jsonify(results)
+
+
+@app.route('/test-ajax', methods=['POST', 'GET'])
+def test_ajax():
+    data = request.get_json()
+    print(data)
+    results = {'message': 'OK', 'data': data}
+    return jsonify(results)
 
 
 if __name__ == '__main__':

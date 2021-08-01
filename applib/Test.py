@@ -20,7 +20,7 @@ class Test:
                 return True
         return False
 
-    def test_1(self, file_1, types_numbers_mapping, order, extra_items=[]):
+    def test_1(self, file_1, types_data, order, extra_items=[]):
 
         items = 0
 
@@ -269,7 +269,7 @@ class Test:
             if len(p) == min_l:
                 path_result_mapped = []
                 for type in p:
-                    path_result_mapped.append(types_numbers_mapping.get(str(type)))
+                    path_result_mapped.append(types_data.get(str(type))[0])
                 paths_result.append(p)
                 paths_result_mapped.append(path_result_mapped)
 
