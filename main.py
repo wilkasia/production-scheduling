@@ -41,7 +41,14 @@ def main():
         {'id': '88', 'tonnage': '500', 'name': 'S-88'},
         {'id': '33', 'tonnage': '400', 'name': 'S-33'},
         {'id': '12', 'tonnage': '400', 'name': 'S-12'},
-        {'id': '11', 'tonnage': '400', 'name': 'S-11'}
+        {'id': '11', 'tonnage': '400', 'name': 'S-11'},
+        {'id': '99', 'tonnage': '900', 'name': 'S-99'},
+        {'id': '10', 'tonnage': '700', 'name': 'S-10'},
+        {'id': '89', 'tonnage': '500', 'name': 'S-89'},
+        {'id': '3', 'tonnage': '400', 'name': 'S-3'},
+        {'id': '91', 'tonnage': '400', 'name': 'S-91'},
+        {'id': '90', 'tonnage': '400', 'name': 'S-90'},
+        # {'id': '20', 'tonnage': '400', 'name': 'S-20'}
     ]
 
     types_numbers = get_types(data + "types-stal.csv")
