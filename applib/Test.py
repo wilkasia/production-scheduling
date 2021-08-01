@@ -13,6 +13,13 @@ class Test:
     #
     g_data = []
 
+    def a_in_b(self, a, b):
+        n = len(a)
+        for i in range(0, len(b) - 1):
+            if a == b[i:i + n]:
+                return True
+        return False
+
     def test_1(self, file_1, types_numbers_mapping, order, extra_items=[]):
 
         items = 0
@@ -157,24 +164,61 @@ class Test:
         print("paths 1")
         print(paths_all)
 
+        for1 = 0
+        for2 = 0
+        for3 = 0
+        for4 = 0
+        counter = 1
         found = 0
         tmp_paths = []
         while found != 1:
+            print("counter: " + str(counter))
+            print('for 1')
             for p1 in paths_all:
+                for1 += 1
                 if set(types_to_process).issubset(p1):
-                    print("found:")
-                    print(p1)
+                    paths_correct.append(p1)
+                    # print("found:")
+                    # print(p1)
                     found = 1
-                    break
-                for p2 in paths_all_single:
-                    if p1[-1] == p2[0]:
-                        tmp_paths.append(p1[:-1] + p2)
+                    # break
+                # for p2 in paths_all_single:
+                #     if p1[-1] == p2[0]:
+                #         tmp_paths.append(p1[:-1] + p2)
+            print('count for 1: ' + str(for1))
 
-            for p3 in tmp_paths:
-                paths_all.append(p3)
+            if found == 0:
+                print('for 2')
+                for p1 in paths_all:
+                    for2 += 1
+                    # print('for 3')
+                    for p2 in paths_all_single:
+                        if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)):
+                            # if (p1[-1] == p2[0]) and (not self.a_in_b(p2, p1)):
+                            if found == 1:
+                                if set(types_to_process).issubset(p1[:-1] + p2):
+                                    paths_correct.append(p1[:-1] + p2)
+                            else:
+                                if set(types_to_process).issubset(p1[:-1] + p2):
+                                    print('IS')
+                                    tmp_paths.clear()
+                                    paths_correct.append(p1[:-1] + p2)
+                                    found = 1
+                                else:
+                                    tmp_paths.append(p1[:-1] + p2)
 
-            tmp_paths = []
+                print('count for 2: ' + str(for2))
 
+                paths_all.clear()
+                print('for 4')
+                for p3 in tmp_paths:
+                    for4 += 1
+                    paths_all.append(p3)
+                print('count for 4: ' + str(for4))
+
+            tmp_paths.clear()
+            counter += 1
+            print("-----counter")
 
         #
         # Laczenie sciezek. Poniewaz w "paths_all" i "paths_all_single" sa te same sciezki laczymy ze soba
@@ -204,10 +248,10 @@ class Test:
         # #
         # Utworzenie listy prawidlowych sekwencji "paths_correct"
         #
-        for path in paths_all:
-            print(path)
-            if all(elem in list(path) for elem in types_to_process):
-                paths_correct.append(path)
+        # for path in paths_all:
+        #     print(path)
+        #     if all(elem in list(path) for elem in types_to_process):
+        #         paths_correct.append(path)
 
         print("paths correct:")
         print(paths_correct)
