@@ -1,5 +1,7 @@
 import json
+import math
 import os, datetime, time, threading, csv
+import random
 from operator import itemgetter
 
 from flask import Flask, render_template, g, redirect, url_for, request, jsonify
@@ -87,12 +89,29 @@ def create_schedule():
         schedule.set_rules_dictionary(r.rules_dictionary)
 
         print("Final path: " + str(final_path))
+        print(order)
 
+        daily_counter = 0
+        time_delta = 1
+        daily_sequence_length = 29
+        daily_sequence_lengths = [28, 21, 26, 27, 29, 30, 31, 32, 24, 25, 20, 33, 22]
         for i in range(len(final_path)):
-            row = ScheduleRow(datetime.date.today(), 145, types_data.get(str(final_path[i]))[0])
-            schedule.add_row(row)
-            if str(final_path[i]) not in ordered_types:
-                schedule.add_extra_type(final_path[i])
+            order_data = next((item for item in order if item["id"] == str(final_path[i])), None)
+            if order_data is None:
+                rows = 1
+            else:
+                rows = order_data['rows']
+            for j in range(rows):
+                row = ScheduleRow(datetime.date.today() + datetime.timedelta(days=time_delta), 145, types_data.get(str(final_path[i]))[0])
+                daily_counter += 1
+                schedule.add_row(row)
+                if str(final_path[i]) not in ordered_types:
+                    schedule.add_extra_type(final_path[i])
+                if daily_counter == daily_sequence_length:
+                    daily_sequence_length = random.choice(daily_sequence_lengths)
+                    daily_counter = 0
+                    time_delta += 1
+
 
         print("Extra types in schedule: " + str(schedule.extra_types))
         print("Changing schedule_status")
@@ -115,6 +134,7 @@ def create_plan():
         item_dict = json.loads(item)
         type_name = types_data.get(item_dict['id'])[0]
         item_dict["name"] = type_name
+        item_dict['rows'] = math.ceil(int(item_dict['tonnage']) / 145)
         order.append(item_dict)
 
     global extra_items

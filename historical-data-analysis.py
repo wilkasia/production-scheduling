@@ -1,3 +1,5 @@
+import collections
+
 import pandas as pd
 
 
@@ -29,14 +31,19 @@ print(total_materials)
 gatunki = dict(tuple(df.groupby(['Rok', 'Miesiąc', 'Dzień'])))
 
 sequences = []
+daily_rows = []
 
 for k, v in gatunki.items():
     sequence = []
     for x in v['Gatunek']:
         sequence.append(x)
+    daily_rows.append(len(sequence))
     sequences.append(sequence)
 
 print(sequences)
+print("Daily rows: " + str(daily_rows))
+occurrences = collections.Counter(daily_rows)
+print("Occurences: " + str(occurrences.keys()))
 
 # Reguły następstw po sobie gatunków - dwuelementowe zbiory
 
