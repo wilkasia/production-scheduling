@@ -17,37 +17,40 @@
         {% endfor %}
     </table>
 
-    <h2>Wygenerowano plan: </h2>
+    <div class="grid-container">
+        <div class="grid-item">
+            <h2>Wygenerowano plan: </h2>
+            <table id="schedule-table" class="schedule-table">
+                <th class="schedule-th">Dzień</th>
+                <th class="schedule-th">Miesiąc</th>
+                <th class="schedule-th">Rok</th>
+                <th class="schedule-th">Tonaż</th>
+                <th class="schedule-th">Gatunek</th>
+                <th class="schedule-th">Akcja</th>
+                {% for scheduleRow in schedule %}
+                    <tr class="schedule-tr">
+                        <td class="schedule-td">{{scheduleRow.day}}</td>
+                        <td class="schedule-td">{{scheduleRow.month}}</td>
+                        <td class="schedule-td">{{scheduleRow.year}}</td>
+                        <td class="schedule-td">{{scheduleRow.tonnage}}</td>
+                        <td class="schedule-td">{{scheduleRow.steel_type}}</td>
 
-    <table id="schedule-table" class="schedule-table">
-        <th class="schedule-th">Dzień</th>
-        <th class="schedule-th">Miesiąc</th>
-        <th class="schedule-th">Rok</th>
-        <th class="schedule-th">Tonaż</th>
-        <th class="schedule-th">Gatunek</th>
-        <th class="schedule-th">Akcja</th>
-        {% for scheduleRow in schedule %}
-            <tr class="schedule-tr">
-                <td class="schedule-td">{{scheduleRow.day}}</td>
-                <td class="schedule-td">{{scheduleRow.month}}</td>
-                <td class="schedule-td">{{scheduleRow.year}}</td>
-                <td class="schedule-td">{{scheduleRow.tonnage}}</td>
-                <td class="schedule-td">{{scheduleRow.steel_type}}</td>
+                        {% if scheduleRow.steel_type in ordered_types %}
+                            <td class="schedule-td"> </td>
+                        {% else %}
+                            <td><i id="delete-row-btn" class="fa fa-close app-shadow" style="color: red;" onclick="function SomeDeleteRowFunction(o) {
+                                const p=o.parentNode.parentNode;
+                                p.parentNode.removeChild(p);
+                        } SomeDeleteRowFunction(this)"></i></td>
+                        {% endif %}
 
-                {% if scheduleRow.steel_type in ordered_types %}
-                    <td class="schedule-td"> </td>
-                {% else %}
-                    <td><i id="delete-row-btn" class="fa fa-close app-shadow" style="color: red;" onclick="function SomeDeleteRowFunction(o) {
-                        const p=o.parentNode.parentNode;
-                        p.parentNode.removeChild(p);
-                } SomeDeleteRowFunction(this)"></i></td>
-                {% endif %}
-
-            </tr>
-        {% endfor %}
-    </table>
-
-<i id="test-btn" class="fa fa-check fa-lg app-shadow" style="color: green;"></i>
+                    </tr>
+                {% endfor %}
+            </table>
+            <i id="test-btn" class="fa fa-check fa-lg app-shadow" style="color: green;"></i>
+        </div>
+        <div class="grid-item" id="new-rules-div"></div>
+    </div>
 <script type=text/javascript src="{{url_for('static', filename='edit-plan.js') }}"></script>
 
 {% endblock %}

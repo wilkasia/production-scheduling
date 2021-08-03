@@ -157,11 +157,11 @@ class Test:
                 paths_all_single.append(sp)
                 paths_all.append(sp)
 
-        print("paths 1")
+        print("paths all")
         print(paths_all)
         paths_all = sorted(paths_all, key=len)
         paths_all_single = sorted(paths_all_single, key=len)
-        print("paths 1")
+        print("paths all sorted")
         print(paths_all)
 
         for1 = 0
@@ -190,24 +190,33 @@ class Test:
             if found == 0:
                 print('for 2')
                 for p1 in paths_all:
+                    # print('paths_all - p1')
+                    # print(p1)
                     for2 += 1
                     # print('for 3')
                     for p2 in paths_all_single:
-                        if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)):
-                            # if (p1[-1] == p2[0]) and (not self.a_in_b(p2, p1)):
+                        # print('paths_all_single - p2')
+                        # print(p2)
+                        if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)): # if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)): if (p1[-1] == p2[0]) and (not self.a_in_b(p2, p1)):
+                            px = p1[:-1] + p2
+                            # print('px:')
+                            # print(px)
                             if found == 1:
-                                if set(types_to_process).issubset(p1[:-1] + p2):
-                                    paths_correct.append(p1[:-1] + p2)
+                                if set(types_to_process).issubset(px):
+                                    paths_correct.append(px)
                             else:
-                                if set(types_to_process).issubset(p1[:-1] + p2):
+                                if set(types_to_process).issubset(px):
                                     print('IS')
                                     tmp_paths.clear()
-                                    paths_correct.append(p1[:-1] + p2)
+                                    paths_correct.append(px)
                                     found = 1
                                 else:
-                                    tmp_paths.append(p1[:-1] + p2)
+                                    tmp_paths.append(px)
 
                 print('count for 2: ' + str(for2))
+
+                if len(paths_all) == 0:
+                    break
 
                 paths_all.clear()
                 print('for 4')

@@ -149,3 +149,13 @@
     display: block;
     margin: .2rem 0 20px;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 50% auto;
+  padding: 0;
+}
+
+.grid-item {
+  padding: 0;
+}
