@@ -90,10 +90,12 @@ class Test:
         # Wypenienie listy rules cyli listy:
         # ktora zawiera w sobie zadane typy stali na 1 lub 2 pozycji
         #
+        # for x in self.g_data:
+        #     for z in types_to_process:
+        #         if z == x[0] or z == x[1]:
+        #             rules.append(x)
         for x in self.g_data:
-            for z in types_to_process:
-                if z == x[0] or z == x[1]:
-                    rules.append(x)
+            rules.append(x)
 
         print("Rules: ")
         print(rules)
@@ -173,7 +175,7 @@ class Test:
         tmp_paths = []
         while found != 1:
             print("counter: " + str(counter))
-            print('for 1')
+            print('start for 1')
             for p1 in paths_all:
                 for1 += 1
                 if set(types_to_process).issubset(p1):
@@ -188,7 +190,7 @@ class Test:
             print('count for 1: ' + str(for1))
 
             if found == 0:
-                print('for 2')
+                print('start for 2')
                 for p1 in paths_all:
                     # print('paths_all - p1')
                     # print(p1)
@@ -197,7 +199,7 @@ class Test:
                     for p2 in paths_all_single:
                         # print('paths_all_single - p2')
                         # print(p2)
-                        if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)): # if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)): if (p1[-1] == p2[0]) and (not self.a_in_b(p2, p1)):
+                        if (not set(p2).issubset(p1)) and (p1[-1] == p2[0]): # if (p1[-1] == p2[0]) and (not set(p2).issubset(p1)): if (p1[-1] == p2[0]) and (not self.a_in_b(p2, p1)):
                             px = p1[:-1] + p2
                             # print('px:')
                             # print(px)
@@ -224,8 +226,9 @@ class Test:
                     for4 += 1
                     paths_all.append(p3)
                 print('count for 4: ' + str(for4))
+                tmp_paths.clear()
 
-            tmp_paths.clear()
+            # tmp_paths.clear()
             counter += 1
             print("-----counter")
 
